@@ -17,23 +17,20 @@ from os import system
 #        print("E: no passwords storage file detected.")
 
 def search_account(site):
-    try:
-        with open("storage", "r") as f: # LOADING JSON FILE
-            accounts = json.load(f)     # WITH ACCOUNTS
-            accounts_found = []
-            for i in accounts:
-                if site in i:
-                    accounts_found.append(i)
-            if accounts_found:
-                result = ""
-                for j in accounts_found:
-                    result += f"{j} {accounts[j]['login']}: {accounts[j]['password']}\n"
-                return "Found accounts:\n" + result
-            else:
-                return "E: no such account was found"
-    except FileNotFoundError:
-        return "E: no passwords storage file detected."
-        
+    with open("storage", "r") as f: # LOADING JSON FILE
+        accounts = json.load(f)     # WITH ACCOUNTS
+        accounts_found = []
+        for i in accounts:
+            if site in i:
+                accounts_found.append(i)
+        if accounts_found:
+            result = ""
+            for j in accounts_found:
+                result += f"{j} {accounts[j]['login']}: {accounts[j]['password']}\n"
+            return "Found accounts:\n" + result
+        else:
+            return "E: no such account was found"
+    
 def append_account(site, login, password):
     try:
         with open("storage", "r") as f:
@@ -95,8 +92,7 @@ def main():
                 print(search_account(input("site >>")))
             elif i == "2":
                 try:
-                    append_account(input("site >>"), input("login >>"), getpass(prompt="password >>", stream=None)
-    )
+                    append_account(input("site >>"), input("login >>"), getpass(prompt="password >>", stream=None))
                 except KeyboardInterrupt:
                     print("\n\naborted")
             elif i == "3":
