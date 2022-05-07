@@ -8,6 +8,9 @@ class OverwriteError(Exception):
 class AccountNotExists(Exception):
     pass
 
+class BadPassphrase(Exception):
+    pass
+
 class DB:
     def __init__(self, filename):
         self.filename = filename
@@ -19,11 +22,14 @@ class DB:
         try:
             with open(self.filename, "r") as f: 
                 encrypted_data = f.read()
-                data = str(self.gpg.decrypt(encrypted_data, passphrase=passphrase))
-                if data:
-                    self.db = json.loads(data)
+                data = self.gpg.decrypt(encrypted_data, passphrase=passphrase)
+                if data.ok:
+                    if data:
+                        self.db = json.loads(data)
+                    else:
+                        self.db = {}
                 else:
-                    self.db = {}
+                    raise BadPassphrase("The passphrase didn't fit")
         except FileNotFoundError:
             self.db = {}
     
