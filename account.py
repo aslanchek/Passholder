@@ -1,4 +1,5 @@
 import json
+import gnupg
 from datetime import datetime
 
 class OverwriteError(Exception):
@@ -10,22 +11,31 @@ class AccountNotExists(Exception):
 class DB:
     def __init__(self, filename):
         self.filename = filename
+        self.gpg = gnupg.GPG()
+        self.gpg.encoding = "utf-8"
         self.db = {}
 
     def load(self, passphrase):
         try:
-            with open(self.filename, "r") as f:            
-                self.db = json.load(f)
+            with open(self.filename, "r") as f: 
+                encrypted_data = f.read()
+                data = str(self.gpg.decrypt(encrypted_data, passphrase=passphrase))
+                if data:
+                    self.db = json.loads(data)
+                else:
+                    self.db = {}
         except FileNotFoundError:
             self.db = {}
     
     def dump(self, passphrase):
         with open(self.filename, "w") as f:
-            json.dump(self.db, f, indent=2)
+            data = str(json.dumps(self.db, indent=2))
+            encrypted_data = str(self.gpg.encrypt(data, [], symmetric=True, passphrase=passphrase))
+            f.write(encrypted_data)
 
     def insert(self, site, login, password):
         if site in self.db:
-            raise OverwriteError("Account exists") #(f"Account on {site} exists. Last modified {self.db[site]['date']}")
+            raise OverwriteError(f"Account on {site} exists. Last modified {self.db[site]['date']}")
         else:
             self.db[site] = { "login": login, "password": password, "date": datetime.now().strftime("%d/%m/%Y %H:%M") }
 
@@ -50,23 +60,16 @@ class DB:
     def __delitem__(self, site): # Usage: del db['vk.com']
         self.delete(site) 
 
-
 def main():
-    db = DB("storage")
+    db = DB('storage')
 
-    db.load("password123")
-
-    db["telegram.com"] = {'login': '89887863423', 'password': '12345'}
-
-
-    # db['vk.com'] = {'login': 'login', 'password': 'password' }
-
-    # del db['google.com']
+    db.load(input("enter passphrase >> "))
     
-    db.dump('other password')
-    
-main() 
+    print(db["vk.com"])
 
+    db.dump(input("enter passphrase >> "))
+
+main()
 
 #
 #if site in self.db:
