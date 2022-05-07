@@ -24,8 +24,8 @@ class DB:
                 encrypted_data = f.read()
                 data = self.gpg.decrypt(encrypted_data, passphrase=passphrase)
                 if data.ok:
-                    if data:
-                        self.db = json.loads(data)
+                    if str(data):
+                        self.db = json.loads(str(data))
                     else:
                         self.db = {}
                 else:
@@ -65,26 +65,3 @@ class DB:
 
     def __delitem__(self, site): # Usage: del db['vk.com']
         self.delete(site) 
-
-def main():
-    db = DB('storage')
-
-    db.load(input("enter passphrase >> "))
-    
-    db["instagram.com"] = {"login": "login", "password": "password"} 
-
-    #print(db["vk.com"])
-
-    db.dump(input("enter passphrase >> "))
-
-main()
-
-#
-#if site in self.db:
-#            print(f"Account on {site} exists. Last modified {self.db[site]['date']}")
-#            if input("Do you want to overwrite? [Y/n] ").lower() == "y":
-#                self.db[site] = { "login": login, "password": password, "date": datetime.now().strftime("%d/%m/%Y %H:%M") }
-#        else:
-#            self.db[site] = { "login": login, "password": password, "date": datetime.now().strftime("%d/%m/%Y %H:%M") }
-#            print(self.db)
-#
