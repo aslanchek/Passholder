@@ -19,19 +19,16 @@ class DB:
         self.db = {}
 
     def load(self, passphrase):
-        try:
-            with open(self.filename, "r") as f: 
-                encrypted_data = f.read()
-                data = self.gpg.decrypt(encrypted_data, passphrase=passphrase)
-                if data.ok:
-                    if str(data):
-                        self.db = json.loads(str(data))
-                    else:
-                        self.db = {}
+        with open(self.filename, "r") as f: 
+            encrypted_data = f.read()
+            data = self.gpg.decrypt(encrypted_data, passphrase=passphrase)
+            if data.ok:
+                if str(data):
+                    self.db = json.loads(str(data))
                 else:
-                    raise BadPassphrase("The passphrase didn't fit")
-        except FileNotFoundError:
-            self.db = {}
+                    self.db = {}
+            else:
+                raise BadPassphrase("The passphrase didn't fit")
     
     def dump(self, passphrase):
         with open(self.filename, "w") as f:
@@ -46,19 +43,22 @@ class DB:
             self.db[site] = { "login": login, "password": password, "date": datetime.now().strftime("%d/%m/%Y %H:%M") }
 
     def update(self, site, login, password):
-        self.db[site] = { "login": login, "password": password, "date": datetime.now().strftime("%d/%m/%Y %H:%M") }
+        if site in self.db:
+            self.db[site] = { "login": login, "password": password, "date": datetime.now().strftime("%d/%m/%Y %H:%M") }
+        else:
+            raise AccountNotExists("Account to update does not exists")
     
     def delete(self, site):
         if site in self.db:
             del self.db[site]
         else:
-            raise AccountNotExists("Account does not exists")
+            raise AccountNotExists("Account to delete does not exists")
 
     def __getitem__(self, site): # Usage: db['vk.com']
         if site in self.db:
             return self.db[site]
         else:
-            raise AccountNotExists("Account does not exists")
+            raise AccountNotExists("Account to get does not exists")
 
     def __setitem__(self, site, value): # Usage: db['vk.com'] = { 'login': 'login', 'password': 'password' }
        self.insert(site, value['login'], value['password'])
