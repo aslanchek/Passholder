@@ -71,7 +71,9 @@ def main():
 
     db.load(input("enter passphrase >> "))
     
-    print(db["vk.com"])
+    db["instagram.com"] = {"login": "login", "password": "password"} 
+
+    #print(db["vk.com"])
 
     db.dump(input("enter passphrase >> "))
 
