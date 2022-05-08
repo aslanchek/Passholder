@@ -1,6 +1,8 @@
-import passholder.db as db
-import passholder.terminal_interface as terminal_interface
-from passholder.errors import *
+import db
+import json
+import terminal_interface
+from errors import *
+
 
 def main():
     term = terminal_interface.Terminal()
@@ -49,7 +51,7 @@ def main():
                     storage.newdb(term.request("enter the passphrase for new storage"))
 
 
-        except JSONDecodeError:
+        except json.decoder.JSONDecodeError:
             term.error("json parsing error")
             if term.choice("want to create new storage?"):
                 new_filename = term.request("enter another filename to prevent overwrite(keep empty to overwrite)")
