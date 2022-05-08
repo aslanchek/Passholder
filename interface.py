@@ -25,5 +25,5 @@ class Terminal:
     def error(self, issue):
         print("E:" + issue)
 
-    def account_forman(self, account):
+    def account_format(self, account):
         return f"{account['login']} : {account['password']}"

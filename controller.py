@@ -4,7 +4,11 @@ from errors import *
 
 def main():
     term = interface.Terminal()
-    storage = db.DB(term.request("enter the storage filename(default=storage)"))    
+    storage_name = term.request("enter the storage filename(default=storage)")
+    if storage_name:
+        storage = db.DB(storage_name)    
+    else:
+        storage = db.DB()    
     
     while not storage.opened:
         try:
@@ -44,7 +48,28 @@ def main():
     while running:
         check = term.checkbox("select the option", ["search account", "add account", "delete account", "exit"])
         if check == "1":
-            term.alert(term.account_format(storage[term.request("enter account website")]))
+            try:
+                term.alert("account found: " + term.account_format(storage[term.request("enter account website")]))
+            except AccountNotExists:
+                term.alert("such account does not exist")
+        elif check == "2":
+            try:
+                site = term.request("site")
+                storage.insert(site, term.request("login"), term.request("password"))
+                term.alert("new account added!")
+                term.alert("changes were not saved to the database, to do this, exit with saving")
+            except OverwtireError:
+                term.alert("such account exists!")
+                if term.choice("want to overwrite?"):
+                    storage.update(site, term.request("login(leave empty to keep unchenged)"), term.request("password"))
+        elif check == "3":
+            try:
+                storage.delete(term.request("site to delete"))
+                term.alert("account deleted!")
+                term.alert("changes were not saved to the database, to do this, exit with saving")
+            except AccountNotExists:
+                term.alert("account to delete does not exists")
+
         elif check == "4":
             i_check = term.checkbox("exit", ["exit and save", "exit without saving", "cancel"])
             if i_check == "1":
