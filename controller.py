@@ -6,13 +6,13 @@ def main():
     term = interface.Terminal()
     storage_name = term.request("enter the storage filename(default=storage)")
     if storage_name:
-        storage = db.DB(storage_name)    
+        storage = db.DB(storage_name)
     else:
-        storage = db.DB()    
-    
+        storage = db.DB()
+
     while not storage.opened:
         try:
-            storage.load(term.request("enter the passphrase")) 
+            storage.load(term.request("enter the passphrase"))
         except DecryptionFailed:
             term.error("decryption failed")
             if term.choice("want to create new storage?"):
@@ -22,14 +22,14 @@ def main():
                     storage.newdb(term.request("enter the passphrase for new storage"))
                 else:
                     storage.newdb(term.request("enter the passphrase for new storage"))
-                    
+
         except FileNotFoundError:
             term.error("no encrypted data was provided")
             if term.choice("want to create new storage?"):
                 storage.newdb(term.request("enter the passphrase for new storage"))
                 term.alert("new storage created!")
                 storage.opened = True
-    
+
         except JSONDecodeError:
             term.error("json parsing error")
             if term.choice("want to create new storage?"):
@@ -39,7 +39,7 @@ def main():
                     storage.newdb(term.request("enter the passphrase for new storage"))
                     storage.opened = True
                 else:
-                    storage.newdb(term.request("enter the passphrase for new storage"))     
+                    storage.newdb(term.request("enter the passphrase for new storage"))
                     storage.opened = True
 
     term.alert("storage opened!")
@@ -58,7 +58,7 @@ def main():
                 storage.insert(site, term.request("login"), term.request("password"))
                 term.alert("new account added!")
                 term.alert("changes were not saved to the database, to do this, exit with saving")
-            except OverwtireError:
+            except OverwriteError:
                 term.alert("such account exists!")
                 if term.choice("want to overwrite?"):
                     storage.update(site, term.request("login(leave empty to keep unchenged)"), term.request("password"))
@@ -83,8 +83,8 @@ def main():
             elif i_check == "3":
                 term.alert("cancel")
 
-            
-            
-            
+
+
+
 main()
 
