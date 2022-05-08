@@ -1,8 +1,14 @@
 from setuptools import setup, find_packages
 from os.path import join, dirname
 
-with open('requirements.txt') as fp:
-    reqs = fp.read()
+reqs = [
+    'caugetch==0.0.1',
+    'clipboard==0.0.4',
+    'colorama==0.4.4',
+    'getpass4==0.0.14.1',
+    'pyperclip==1.8.2',
+    'python-gnupg==0.4.8',
+]
 
 setup(
     name='passholder',
