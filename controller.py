@@ -1,9 +1,9 @@
 import db
-import interface
+import terminal_interface
 from errors import *
 
 def main():
-    term = interface.Terminal()
+    term = terminal_interface.Terminal()
     storage_name = term.request("enter the storage filename(default=storage)")
     if storage_name:
         storage = db.DB(storage_name)
