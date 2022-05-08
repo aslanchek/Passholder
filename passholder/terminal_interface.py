@@ -14,9 +14,10 @@ class Terminal:
         else:
             return False
 
-    def checkbox(self, issue: str, options: List[str]):
+    def select(self, issue: str, options: List[str]):
         '''issue - str object, options - array of str'''
-        print("C:" + issue)
+        if issue:
+            print("C:" + issue)
         for i in range(0, len(options)):
             print(f"{i+1}) {options[i]}")
         return input(">> ")

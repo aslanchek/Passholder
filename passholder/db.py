@@ -1,20 +1,17 @@
 import json
 import gnupg
-import os
 from datetime import datetime
 from errors import *
 
 class DB:
-    def __init__(self, filename="storage", new=False):
-        if not(new or os.path.isfile(filename)):
-            raise FileNotFoundError("Mentioned file does not exist.")
+    def __init__(self, filename="storage"):
         self.filename = filename
         self.__gpg = gnupg.GPG()
         self.__gpg.encoding = "utf-8"
         self.__db = {}
         self.opened = False
 
-    def newdb(self, passphrase):
+    def newdb(self, passphrase = "default"):
         with open(self.filename, "w") as f:
             encrypted_data = str(self.__gpg.encrypt("{}", [], symmetric=True,
                                                     passphrase=passphrase))

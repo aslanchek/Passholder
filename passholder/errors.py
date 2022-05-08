@@ -1,7 +1,7 @@
 class OverwriteError(Exception):
     pass
 
-class AccountNotExists(Exception):
+class AccountDoesNotExists(Exception):
     pass
 
 class BadPassphrase(Exception):
