@@ -1,18 +1,7 @@
 import json
 import gnupg
 from datetime import datetime
-
-class OverwriteError(Exception):
-    pass
-
-class AccountNotExists(Exception):
-    pass
-
-class BadPassphrase(Exception):
-    pass
-
-class DecryptionFailed(Exception):
-    pass
+from errors import *
 
 class DB:
     def __init__(self, filename="storage"):
@@ -20,6 +9,7 @@ class DB:
         self.__gpg = gnupg.GPG()
         self.__gpg.encoding = "utf-8"
         self.__db = {}
+        self.opened = False
 
     def newdb(self, passphrase):
         with open(self.filename, "w") as f:
@@ -36,6 +26,7 @@ class DB:
                         self.__db = json.loads(str(data))
                     else:
                         self.__db = {}
+                    self.opened = True
                 elif data.status == "decryption failed":
                     raise DecryptionFailed("Something wrong with storage file")
                     #raise BadPassphrase("The passphrase didn't fit")
@@ -60,6 +51,9 @@ class DB:
         else:
             raise AccountNotExists("Account to update does not exists")
     
+    def search(self, pattern):
+        pass
+
     def delete(self, site):
         if site in self.__db:
             del self.__db[site]
