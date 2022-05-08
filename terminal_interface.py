@@ -1,6 +1,8 @@
+from typing import List
+
 class Terminal:
     def __init__(self):
-        self.check_init = True
+        pass
 
     def request(self, issue):
         return input(issue + ">> ")
@@ -12,7 +14,7 @@ class Terminal:
         else:
             return False
 
-    def checkbox(self, issue, options):
+    def checkbox(self, issue: str, options: List[str]):
         '''issue - str object, options - array of str'''
         print("C:" + issue)
         for i in range(0, len(options)):

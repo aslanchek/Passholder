@@ -1,5 +1,5 @@
 import db
-import interface
+import terminal_interface
 from errors import *
 
 def main():
@@ -28,6 +28,12 @@ def main():
         if term.choice("Want to try again?"):
             main()
         return 0
+    term = terminal_interface.Terminal()
+    storage_name = term.request("enter the storage filename(default=storage)")
+    if storage_name:
+        storage = db.DB(storage_name)
+    else:
+        storage = db.DB()
 
     while not storage.opened:
         try:
