@@ -1,9 +1,9 @@
-import db
-import terminal_interface
-from errors import *
+import passholder.db as db
+import passholder.terminal_interface as terminal_interface
+from passholder.errors import *
 
 def main():
-    term = interface.Terminal()
+    term = terminal_interface.Terminal()
     storage_name = term.request("enter the storage filename (default=storage) \
                                 or '-' if it does not exist\n")
     try:
