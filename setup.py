@@ -8,11 +8,11 @@ setup(
     name='passholder',
     version='0.0.2',
     license='GPL-3.0',
-    description = 'This software is needed for storage passwords in encrypted file.',
+    description = 'Password manager',
     url = 'https://github.com/aslanchek/Passholder',
     download_url = 'https://github.com/aslanchek/Passholder/archive/refs/tags/v0.0.2-alpha.tar.gz',
     packages=find_packages(),
-    long_description=open(join(dirname(__file__), 'README.md')).read(),
+    long_description='See github for long description.',
     install_requires=reqs,
     entry_points={
         'console_scripts':
