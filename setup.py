@@ -11,7 +11,7 @@ setup(
     description = 'This software is needed for storage passwords \
                     in encrypted file.',
     url = 'https://github.com/aslanchek/Passholder',
-    download_url = 'https://github.com/aslanchek/Passholder/archive/refs/tags/v0.0.1-alpha.tar.gz',
+    download_url = 'https://github.com/aslanchek/Passholder/archive/refs/tags/v0.0.2-alpha.tar.gz',
     packages=find_packages(),
     long_description=open(join(dirname(__file__), 'README.md')).read(),
     install_requires=reqs,
