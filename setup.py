@@ -1,5 +1,4 @@
 from setuptools import setup, find_packages
-from os.path import join, dirname
 
 reqs = [
     'caugetch==0.0.1',
@@ -12,11 +11,11 @@ reqs = [
 
 setup(
     name='passholder',
-    version='0.0.2',
+    version='0.0.3',
     license='GPL-3.0',
     description = 'Password manager',
     url = 'https://github.com/aslanchek/Passholder',
-    download_url = 'https://github.com/aslanchek/Passholder/archive/refs/tags/v0.0.2-alpha.tar.gz',
+    download_url = 'https://github.com/aslanchek/Passholder/archive/refs/tags/v0.0.3-alpha.tar.gz',
     packages=find_packages(),
     long_description='See github for long description.',
     install_requires=reqs,
