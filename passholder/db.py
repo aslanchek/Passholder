@@ -2,7 +2,7 @@ import json
 import gnupg
 import os
 from datetime import datetime
-from errors import *
+from passholder.errors import *
 
 class DB:
     def __init__(self, filename="storage", new=False):
