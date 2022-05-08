@@ -8,7 +8,8 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 gnupg
-* Install HomeBrew by entering the following in the command line:
+* macOS
+  Install HomeBrew by entering the following in the command line:
   ```sh
   /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   ```
