@@ -22,7 +22,7 @@ class Terminal:
         return input(">> ")
 
     def alert(self, issue):
-        print("A:" + issue) 
+        print("A:" + issue)
 
     def error(self, issue):
         print("E:" + issue)

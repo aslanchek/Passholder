@@ -3,6 +3,31 @@ import terminal_interface
 from errors import *
 
 def main():
+    term = interface.Terminal()
+    storage_name = term.request("enter the storage filename (default=storage) \
+                                or '-' if it does not exist\n")
+    try:
+        if storage_name == '-':
+            if term.choice("Want to create new storage?"):
+                storage_name = term.request("enter the storage filename (default=storage)")
+                if storage_name:
+                    storage = db.DB(storage_name, new=True)
+                else:
+                    storage = db.DB(new=True)
+                storage.newdb(term.request("enter the passphrase for new storage"))
+                term.alert("new storage created!")
+                storage.opened = True
+            else:
+                return 0
+        elif storage_name:
+            storage = db.DB(storage_name)
+        else:
+            storage = db.DB()
+    except FileNotFoundError:
+        term.error("File you mentioned not found.")
+        if term.choice("Want to try again?"):
+            main()
+        return 0
     term = terminal_interface.Terminal()
     storage_name = term.request("enter the storage filename(default=storage)")
     if storage_name:
@@ -23,12 +48,6 @@ def main():
                 else:
                     storage.newdb(term.request("enter the passphrase for new storage"))
 
-        except FileNotFoundError:
-            term.error("no encrypted data was provided")
-            if term.choice("want to create new storage?"):
-                storage.newdb(term.request("enter the passphrase for new storage"))
-                term.alert("new storage created!")
-                storage.opened = True
 
         except JSONDecodeError:
             term.error("json parsing error")
