@@ -1,11 +1,11 @@
 from typing import List
 
 class Terminal:
-    def __init__(self):
-        pass
+    def __init__(self, prompt = ">> "):
+        self.prompt = prompt
 
     def request(self, issue):
-        return input(issue + ">> ")
+        return input(issue + self.prompt)
 
     def choice(self, issue):
         check = input(issue + "[Y/n] ")
@@ -20,7 +20,7 @@ class Terminal:
             print("C:" + issue)
         for i in range(0, len(options)):
             print(f"{i+1}) {options[i]}")
-        return input(">> ")
+        return input(self.prompt)
 
     def alert(self, issue):
         print("A:" + issue)
