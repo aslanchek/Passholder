@@ -3,6 +3,7 @@ import gnupg
 from datetime import datetime
 from errors import *
 
+
 class DB:
     def __init__(self):
         self.__gpg = gnupg.GPG()
