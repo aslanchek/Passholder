@@ -8,11 +8,14 @@ class Terminal:
         return input(issue + self.prompt)
 
     def choice(self, issue):
-        check = input(issue + "[Y/n] ")
-        if check.lower() == "y":
-            return True
-        else:
-            return False
+        while True:
+            check = input(issue + "[y/n] ")
+            if check.lower() == "y":
+                return True
+            elif check.lower() == "n":
+                return False
+
+            print("Please enter one letter ('y' or 'n')")            
 
     def select(self, issue: str, options: List[str]):
         '''issue - str object, options - array of str'''
