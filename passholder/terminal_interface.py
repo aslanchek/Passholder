@@ -29,13 +29,11 @@ class Terminal:
                 selection = int(input(self.prompt))
             except ValueError:
                 print("Please, enter a number")                
-                continue
-            
-            if not 1 <= selection <= len(options):
+            else:
+                if 1 <= selection <= len(options):
+                    return selection
+                
                 print("Enter a number, from list above")
-                continue
-
-            return selection
         
     def alert(self, issue):
         print("A: " + issue)
