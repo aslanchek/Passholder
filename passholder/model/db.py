@@ -67,24 +67,22 @@ class DB:
     def load(cls, filename = "storage", passphrase = None):        
         gpg = gnupg.GPG()
         gpg.encoding = "utf-8"
-
+        db = {}
         with open(filename, "r") as f:
-            if gpg.is_valid_file(f):                
-                encrypted_data = f.read()
-                data = gpg.decrypt(encrypted_data,
-                                   passphrase=passphrase)
-
-                if data.status == "decryption ok":
-                    if str(data):
-                        db = json.loads(str(data))
-                    else:
-                        db = {}
-
-                elif data.status == "decryption failed":
-                    raise DecryptionFailed("Something wrong with storage file")
-                elif data.status == "no data was provided":
-                    raise FileNotFoundError("No encrypted data was provided")
-                else:
-                    raise Exception("Unknown error")
+            encrypted_data = f.read()
+            data = gpg.decrypt(encrypted_data,
+                               passphrase=passphrase)
+            
+            if data.status == "decryption ok":
+                if str(data):
+                    db = json.loads(str(data))
+        
+            elif data.status == "decryption failed":
+                raise DecryptionFailed("Something wrong with storage file")
+            elif data.status == "no data was provided":
+                raise FileNotFoundError("No encrypted data was provided")
+            # else:                
+            #     print(data.status)
+            #     raise Exception("Unknown error")
                 
         return cls(db, gpg)
