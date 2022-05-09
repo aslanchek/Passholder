@@ -71,7 +71,7 @@ def main():
         if check == "1":
             try:
                 term.alert("account found: " + term.account_format(storage[term.request("enter account website")]))
-            except AccountNotExists:
+            except AccountDoesNotExists:
                 term.alert("such account does not exist")
         elif check == "2":
             try:
@@ -88,7 +88,7 @@ def main():
                 storage.delete(term.request("site to delete"))
                 term.alert("account deleted!")
                 term.alert("changes were not saved to the database, to do this, exit with saving")
-            except AccountNotExists:
+            except AccountDoesNotExists:
                 term.alert("account to delete does not exists")
 
         elif check == "4":

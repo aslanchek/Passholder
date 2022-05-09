@@ -1,25 +1,32 @@
 import controller_dev as controller
 import terminal_interface
 
-term = terminal_interface.Terminal()
-controller = controller.Controller()
+interface = terminal_interface.Terminal()
+controller = controller.Сontroller(interface)
+
+DEFAULT_FILENAME = "storage"
 
 def main():
     if controller.storage_exists(filename = DEFAULT_FILENAME):
-        term.alert("file storage exists")
-        if term.choice("do you want to use this storage?"):
-            controller.open_storage(filename = DEFAULT_FILENAME):
+        interface.alert("default storage filename exists")
+        if interface.choice("do you want to use this storage?"):
+            controller.open_storage(DEFAULT_FILENAME, interface.request("enter storage password"))
         else:
-            controller.create_storage(filename = DEFAULT_FILENAME)
+            controller.create_storage(filename = interface.request("enter storage filename"))
+
     else:
-        term.alert("storage file not found")
-        check = term.select("select the option:", ["enter another filename", "create new storage"])
-        if check = "1":
-            controller.open_storage(filename = term.request("enter storage filename"))
+        interface.alert("storage file not found")
+        check = interface.select("select the option:", ["enter another filename", "create new storage"])
+        if check == "1":
+            filename_tmp = interface.request("enter another storage filename")
+            if controller.storage_exists(filename=filename_tmp):
+                passphrase_tmp = interface.request("enter storage password") 
+                controller.open_storage(filename_tmp, passphrase_tmp)
+        ######################################
         elif check == "2":
-            controller.create_storage(filename = term.request("enter new storage filename"))
+            controller.create_storage(interface.request("enter new storage filename"))
         elif check == "3":
-            term.alert("closing...")
+            interface.alert("closing...")
             exit()
 
 

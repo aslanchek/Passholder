@@ -4,21 +4,20 @@ from datetime import datetime
 from errors import *
 
 class DB:
-    def __init__(self, filename="storage"):
-        self.filename = filename
+    def __init__(self):
         self.__gpg = gnupg.GPG()
         self.__gpg.encoding = "utf-8"
         self.__db = {}
         self.opened = False
 
-    def newdb(self, passphrase = "default"):
-        with open(self.filename, "w") as f:
+    def newdb(self, filename, passphrase):
+        with open(filename, "w") as f:
             encrypted_data = str(self.__gpg.encrypt("{}", [], symmetric=True,
                                                     passphrase=passphrase))
             f.write(encrypted_data)
 
-    def load(self, passphrase=None):
-        with open(self.filename, "r") as f:
+    def load(self, filename, passphrase):
+        with open(filename, "r") as f:
             if self.__gpg.is_valid_file(f):
                 encrypted_data = f.read()
                 data = self.__gpg.decrypt(encrypted_data,
@@ -35,8 +34,8 @@ class DB:
                 elif data.status == "no data was provided":
                     raise FileNotFoundError("No encrypted data was provided")
 
-    def dump(self, passphrase):
-        with open(self.filename, "w") as f:
+    def dump(self, filename, passphrase):
+        with open(filename, "w") as f:
             data = str(json.dumps(self.__db, indent=2))
             encrypted_data = str(self.__gpg.encrypt(data, [], symmetric=True,
                                                     passphrase=passphrase))
