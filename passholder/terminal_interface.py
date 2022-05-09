@@ -17,19 +17,33 @@ class Terminal:
 
             print("Please enter one letter ('y' or 'n')")            
 
-    def select(self, issue: str, options: List[str]):
-        '''issue - str object, options - array of str'''
+    def select(self, options: List[str], issue = ""):
         if issue:
-            print("C:" + issue)
-        for i in range(0, len(options)):
-            print(f"{i+1}) {options[i]}")
-        return input(self.prompt)
+            print("C: " + issue)
 
+        for i in range(0, len(options)):
+            print("{number}: {option}".format(number=i + 1, option = options[i]))
+
+        while True:
+            try:
+                selection = int(input(self.prompt))
+            except ValueError:
+                print("Please, enter a number")                
+                continue
+            
+            if not 1 <= selection <= len(options):
+                print("Enter a number, from list above")
+                continue
+
+            return selection
+        
     def alert(self, issue):
-        print("A:" + issue)
+        print("A: " + issue)
 
     def error(self, issue):
-        print("E:" + issue)
+        print("E: " + issue)
 
     def account_format(self, account):
-        return f"{account['login']} : {account['password']}"
+        return "{login}: {password}".format(*account)
+
+
