@@ -17,7 +17,7 @@ def init_db():
             resume = True
             while resume and not db:
                 try:
-                    db = DB.load(passphrase = tui.request("enter passphrase"))
+                    db = DB.load(passphrase = tui.request_password("enter passphrase"))
                 except errors.DecryptionFailed:
                     tui.error("decryption failed")
                     if not tui.choice("want to try again?"):
@@ -51,7 +51,7 @@ def init_db():
                 resume = True
                 while resume and not db:
                     try:
-                        db = DB.load(filename, tui.request("enter password"))
+                        db = DB.load(filename, tui.request_password("enter password"))
                     except errors.DecryptionFailed:
                         tui.error("decryptuon failed")
                         if not tui.choice("want to try again? "):
@@ -87,7 +87,7 @@ def delete():
         tui.error("such account does not exist")
 
 def save():
-    db.dump(filename, tui.request("enter passphrase"))
+    db.dump(filename, tui.request_password("enter passphrase"))
     tui.alert("changes saved")
 
 try:
