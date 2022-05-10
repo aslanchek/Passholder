@@ -13,7 +13,7 @@ class Terminal:
 
     def choice(self, issue):
         while True:
-            check = input(issue + " [y/n]")
+            check = input(issue + "[y/n] ")
             if check.lower() == "y":
                 return True
             elif check.lower() == "n":
