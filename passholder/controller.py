@@ -17,12 +17,16 @@ def init_db():
             resume = True
             while resume and not db:
                 try:
-                    db = DB.load(passphrase = tui.request("enter password"))
+                    db = DB.load(passphrase = tui.request("enter passphrase"))
                 except errors.DecryptionFailed:
                     tui.error("decryption failed")
                     if not tui.choice("want to try again?"):
                         resume = False
-
+                except FileNotFoundError:
+                    tui.error("no encrypted data was provided")
+                    resume = False
+                except json.decoder.JSONDecodeError:
+                    tui.error("json parsing error")
             if db:
                 tui.alert("storage loaded")
                 return db, filename
@@ -31,7 +35,7 @@ def init_db():
         tui.alert("default storage not found")
         
     while not db:
-        select = tui.select(["create new storage", "enter different filename", "quit"])
+        select = tui.select(["create new storage", "enter another filename", "quit"])
         if select == 1:
             if not exists(filename):
                 db = DB.create()
@@ -79,31 +83,34 @@ def delete():
     try:
         db.delete(tui.request("site"))
         tui.alert("account deleted")
-    except errors.AccountDoesNotExists:
+    except errors.AccountDoesNotExist:
         tui.error("such account does not exist")
 
 def save():
-    db.dump(filename, tui.request("enter password"))
+    db.dump(filename, tui.request("enter passphrase"))
     tui.alert("changes saved")
 
+try:
 
-tui = Terminal()
-db, filename = init_db()
-
-
-running = True  
-
-
-while running:
-    select = tui.select(["add new", "delete", "search", "save", "exit"])
-    if select == 1:
-        add()
-    elif select == 2:
-        delete()
-    elif select == 3:
-        search()
-    elif select == 4:
-        save()
-    elif select == 5:
-        running = False
-        tui.alert("closing")
+    tui = Terminal()
+    db, filename = init_db()
+    
+    
+    running = True  
+    
+    
+    while running:
+        select = tui.select(["add new", "delete", "search", "save", "exit"])
+        if select == 1:
+            add()
+        elif select == 2:
+            delete()
+        elif select == 3:
+            search()
+        elif select == 4:
+            save()
+        elif select == 5:
+            running = False
+            tui.alert("closing")
+except KeyboardInterrupt:
+    tui.alert("\nclosing")
