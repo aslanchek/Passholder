@@ -81,8 +81,5 @@ class DB:
                 raise DecryptionFailed("Something wrong with storage file")
             elif data.status == "no data was provided":
                 raise FileNotFoundError("No encrypted data was provided")
-            # else:                
-            #     print(data.status)
-            #     raise Exception("Unknown error")
                 
         return cls(db, gpg)
