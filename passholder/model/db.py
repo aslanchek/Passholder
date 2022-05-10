@@ -30,7 +30,7 @@ class DB:
             self.__db[site] = { "login": login, "password": password,
                                 "date": datetime.now().strftime("%d/%m/%Y %H:%M") }
         else:
-            raise AccountDoesNotExists("Account to update does not exists")
+            raise AccountDoesNotExist("Account to update does not exists")
 
     def search(self, pattern):
         pass
@@ -39,13 +39,13 @@ class DB:
         if site in self.__db:
             del self.__db[site]
         else:
-            raise AccountDoesNotExists("Account to delete does not exists")
+            raise AccountDoesNotExist("Account to delete does not exists")
 
     def __getitem__(self, site): # Usage: __db['vk.com']
         if site in self.__db:
             return self.__db[site]
         else:
-            raise AccountDoesNotExists("Account to get does not exists")
+            raise AccountDoesNotExist("Account to get does not exists")
 
     def __setitem__(self, site, value): # Usage: __db['vk.com'] = { 'login': 'login', 'password': 'password' }
        self.insert(site, value['login'], value['password'])
