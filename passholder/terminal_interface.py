@@ -1,4 +1,5 @@
 from typing import List
+from getpass_asterisk.getpass_asterisk import getpass_asterisk
 
 class Terminal:
     def __init__(self, prompt = ">> "):
@@ -6,6 +7,9 @@ class Terminal:
 
     def request(self, issue):
         return input(issue + self.prompt)
+
+    def request_password(self, issue):
+        return getpass_asterisk(issue + self.prompt)
 
     def choice(self, issue):
         while True:
