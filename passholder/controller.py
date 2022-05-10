@@ -5,54 +5,105 @@ from os.path import exists
 import errors
 import json
 
+filename = "storage"
+
 def init_db():
     db = None
+    global filename
 
-    if exists("storage"):
-        tui.alert("Default storage exists")
-        if tui.choice("Do you want to use this storage? "):
+    if exists(filename):
+        tui.alert("default storage exists")
+        if tui.choice("do you want to use this storage?"):
             resume = True
             while resume and not db:
                 try:
-                    db = DB.load(passphrase = tui.request("Enter password "))
+                    db = DB.load(passphrase = tui.request("enter password"))
                 except errors.DecryptionFailed:
-                    tui.error("Decryption failed")
-                    if not tui.choice("Want to try again? "):
+                    tui.error("decryption failed")
+                    if not tui.choice("want to try again?"):
                         resume = False
 
             if db:
-                return db
+                tui.alert("storage loaded")
+                return db, filename
 
     else:
-        tui.alert("Default storage not found")
+        tui.alert("default storage not found")
         
     while not db:
-        select = tui.select(["Create new storage", "Enter different filename", "Quit"])
+        select = tui.select(["create new storage", "enter different filename", "quit"])
         if select == 1:
-            db = DB.create()
+            if not exists(filename):
+                db = DB.create()
+                tui.alert("new storage created")
+            else:
+                tui.alert(f'storage "{filename}" exists')
+                if tui.choice("do you want to overwrite?"): 
+                    db = DB.create()
+                    tui.alert("new storage created")
         elif select == 2:
-            filename = tui.request("Enter filename ")
-            
+            filename = tui.request("enter filename")
             if exists(filename):
                 resume = True
                 while resume and not db:
                     try:
-                        db = DB.load(filename, tui.request("Enter password "))
+                        db = DB.load(filename, tui.request("enter password"))
                     except errors.DecryptionFailed:
-                        tui.error("Decryptuon failed")
-                        if not tui.choice("Want to try again? "):
+                        tui.error("decryptuon failed")
+                        if not tui.choice("want to try again? "):
                             resume = False
             else:
-                tui.alert("Storage not found")
+                tui.alert("storage not found")
 
         else:
             exit(0)
-    return db
-        
-        
+
+    tui.alert("storage loaded")
+    return db, filename
+
+def add():
+    try:
+        db.insert(tui.request("site"), tui.request("login"), tui.request("password"))
+        tui.alert("account added")
+    except errors.OverwriteError:
+        tui.error("such account exists")
+
+def search():
+    try:
+        site = tui.request("site")
+        tui.alert(f"account found\nlogin: {db[site]['login']} password:{db[site]['password']}")
+    except errors.AccountDoesNotExist:
+        tui.error(f"account for {site} not found")
+
+def delete():
+    try:
+        db.delete(tui.request("site"))
+        tui.alert("account deleted")
+    except errors.AccountDoesNotExists:
+        tui.error("such account does not exist")
+
+def save():
+    db.dump(filename, tui.request("enter password"))
+    tui.alert("changes saved")
+
 
 tui = Terminal()
+db, filename = init_db()
 
-db = init_db()
-    
 
+running = True  
+
+
+while running:
+    select = tui.select(["add new", "delete", "search", "save", "exit"])
+    if select == 1:
+        add()
+    elif select == 2:
+        delete()
+    elif select == 3:
+        search()
+    elif select == 4:
+        save()
+    elif select == 5:
+        running = False
+        tui.alert("closing")
