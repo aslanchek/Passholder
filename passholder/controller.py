@@ -75,7 +75,7 @@ def add():
 def search():
     try:
         site = tui.request("site")
-        tui.alert(f"account found\nlogin: {db[site]['login']} password:{db[site]['password']}")
+        tui.alert(f"account found\nlogin: {db[site]['login']} password: {db[site]['password']}") # FIXME
     except errors.AccountDoesNotExist:
         tui.error(f"account for {site} not found")
 
@@ -87,7 +87,7 @@ def delete():
         tui.error("such account does not exist")
 
 def save():
-    db.dump(filename, tui.request_password("enter passphrase"))
+    db.dump(filename, tui.request_password("enter passphrase", repeat=True))
     tui.alert("changes saved")
 
 try:
@@ -113,4 +113,4 @@ try:
             running = False
             tui.alert("closing")
 except KeyboardInterrupt:
-    tui.alert("\nclosing")
+    tui.alert("\n<C-c>: abort")
