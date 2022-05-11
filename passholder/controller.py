@@ -96,7 +96,7 @@ def save():
     db.dump(filename, tui.request_password("enter passphrase", repeat=True))
     tui.alert("changes saved")
 
-def main():
+def main(tui):
     running = True
     while running:
         select = tui.select(["add new", "delete", "search", "save", "exit"])
@@ -118,7 +118,7 @@ if __name__ == "__main__":
     tui = Terminal()
     try:
         db, filename = init_db()
-        main()
+        main(tui)
     except KeyboardInterrupt:
         tui.alert("\n<C-c>: abort")
     except EOFError:
