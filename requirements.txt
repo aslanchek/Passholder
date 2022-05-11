@@ -1,6 +1,2 @@
-caugetch==0.0.1
-clipboard==0.0.4
-colorama==0.4.4
-getpass4==0.0.14.1
-pyperclip==1.8.2
+getpass-asterisk==1.0.0
 python-gnupg==0.4.8
