@@ -27,6 +27,9 @@ def init_db():
                     resume = False
                 except json.decoder.JSONDecodeError:
                     tui.error("json parsing error")
+                except IsADirectoryError:
+                    tui.error("file is e directory, must be a file")
+                    resume = False
             if db:
                 tui.alert("storage loaded")
                 return db, filename
