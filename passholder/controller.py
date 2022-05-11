@@ -27,7 +27,7 @@ def init_db():
                 except json.decoder.JSONDecodeError:
                     tui.error("json parsing error")
                 except IsADirectoryError:
-                    tui.error("file is e directory, must be a file")
+                    tui.error("it is a directory, must be a gpg file")
                     resume = False
             if db:
                 tui.alert("storage loaded")
@@ -79,7 +79,7 @@ def add():
 def search():
     try:
         site = tui.request("site")
-        tui.alert(f"account found\nlogin: {db[site]['login']} password: {db[site]['password']}")  # FIXME
+        tui.alert(f"account found\nlogin: {db[site]['login']} password: {db[site]['password']}")
     except errors.AccountDoesNotExist:
         tui.error(f"account for {site} not found")
 
@@ -96,14 +96,8 @@ def save():
     db.dump(filename, tui.request_password("enter passphrase", repeat=True))
     tui.alert("changes saved")
 
-
-try:
-
-    tui = Terminal()
-    db, filename = init_db()
-
+def main():
     running = True
-
     while running:
         select = tui.select(["add new", "delete", "search", "save", "exit"])
         if select == 1:
@@ -117,5 +111,16 @@ try:
         elif select == 5:
             running = False
             tui.alert("closing")
-except KeyboardInterrupt:
-    tui.alert("\n<C-c>: abort")
+
+
+
+if __name__ == "__main__":
+    tui = Terminal()
+    try:
+        db, filename = init_db()
+        main()
+    except KeyboardInterrupt:
+        tui.alert("\n<C-c>: abort")
+    except EOFError:
+        tui.alert("\n<C-d>: abort")
+   
