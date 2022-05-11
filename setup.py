@@ -7,7 +7,7 @@ reqs = [
 
 setup(
     name='passholder',
-    version='0.1.1',
+    version='0.1.2',
     license='GPL-3.0',
     description = 'Password manager',
     url = 'https://github.com/aslanchek/Passholder',
