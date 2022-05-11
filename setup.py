@@ -1,17 +1,13 @@
 from setuptools import setup, find_packages
 
 reqs = [
-    'caugetch==0.0.1',
-    'clipboard==0.0.4',
-    'colorama==0.4.4',
-    'getpass4==0.0.14.1',
-    'pyperclip==1.8.2',
+    'getpass-asterisk==1.0.0',
     'python-gnupg==0.4.8',
 ]
 
 setup(
     name='passholder',
-    version='0.0.3',
+    version='0.1.0',
     license='GPL-3.0',
     description = 'Password manager',
     url = 'https://github.com/aslanchek/Passholder',

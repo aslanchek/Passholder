@@ -1,11 +1,10 @@
-from model.db import DB
-from terminal_interface import Terminal
+import json
 from os.path import exists
 
-import errors
-import json
+from passholder import *
 
 filename = "storage"
+
 
 def init_db():
     db = None
@@ -17,7 +16,7 @@ def init_db():
             resume = True
             while resume and not db:
                 try:
-                    db = DB.load(passphrase = tui.request_password("enter passphrase"))
+                    db = DB.load(passphrase=tui.request_password("enter passphrase"))
                 except errors.DecryptionFailed:
                     tui.error("decryption failed")
                     if not tui.choice("want to try again?"):
@@ -36,7 +35,7 @@ def init_db():
 
     else:
         tui.alert("default storage not found")
-        
+
     while not db:
         select = tui.select(["create new storage", "enter another filename", "quit"])
         if select == 1:
@@ -45,7 +44,7 @@ def init_db():
                 tui.alert("new storage created")
             else:
                 tui.alert(f'storage "{filename}" exists')
-                if tui.choice("do you want to overwrite?"): 
+                if tui.choice("do you want to overwrite?"):
                     db = DB.create()
                     tui.alert("new storage created")
         elif select == 2:
@@ -68,6 +67,7 @@ def init_db():
     tui.alert("storage loaded")
     return db, filename
 
+
 def add():
     try:
         db.insert(tui.request("site"), tui.request("login"), tui.request("password"))
@@ -75,12 +75,14 @@ def add():
     except errors.OverwriteError:
         tui.error("such account exists")
 
+
 def search():
     try:
         site = tui.request("site")
-        tui.alert(f"account found\nlogin: {db[site]['login']} password: {db[site]['password']}") # FIXME
+        tui.alert(f"account found\nlogin: {db[site]['login']} password: {db[site]['password']}")  # FIXME
     except errors.AccountDoesNotExist:
         tui.error(f"account for {site} not found")
+
 
 def delete():
     try:
@@ -89,19 +91,19 @@ def delete():
     except errors.AccountDoesNotExist:
         tui.error("such account does not exist")
 
+
 def save():
     db.dump(filename, tui.request_password("enter passphrase", repeat=True))
     tui.alert("changes saved")
+
 
 try:
 
     tui = Terminal()
     db, filename = init_db()
-    
-    
-    running = True  
-    
-    
+
+    running = True
+
     while running:
         select = tui.select(["add new", "delete", "search", "save", "exit"])
         if select == 1:

@@ -1,15 +1,15 @@
 import json
 import gnupg
 from datetime import datetime
-from errors import *
+from passholder.errors import *
 
 
-class DB:        
+class DB:
     def __init__(self, db, gpg):
         self.__gpg = gpg
         self.__db = db
 
-        
+
     def dump(self, filename, passphrase):
         with open(filename, "w") as f:
             data = str(json.dumps(self.__db, indent=2))
@@ -24,7 +24,7 @@ class DB:
         else:
             self.__db[site] = { "login": login, "password": password,
                                 "date": datetime.now().strftime("%d/%m/%Y %H:%M") }
-            
+
     def update(self, site, login, password):
         if site in self.__db:
             self.__db[site] = { "login": login, "password": password,
@@ -53,18 +53,18 @@ class DB:
     def __delitem__(self, site): # Usage: del __db['vk.com']
         self.delete(site)
 
-            
+
     @classmethod
     def create(cls):
         gpg = gnupg.GPG()
         gpg.encoding = "utf-8"
 
         db = {}
-        
+
         return cls(db, gpg)
-    
+
     @classmethod
-    def load(cls, filename = "storage", passphrase = None):        
+    def load(cls, filename = "storage", passphrase = None):
         gpg = gnupg.GPG()
         gpg.encoding = "utf-8"
         db = {}
@@ -72,14 +72,14 @@ class DB:
             encrypted_data = f.read()
             data = gpg.decrypt(encrypted_data,
                                passphrase=passphrase)
-            
+
             if data.status == "decryption ok":
                 if str(data):
                     db = json.loads(str(data))
-        
+
             elif data.status == "decryption failed":
                 raise DecryptionFailed("Something wrong with storage file")
             elif data.status == "no data was provided":
                 raise FileNotFoundError("No encrypted data was provided")
-                
+
         return cls(db, gpg)
