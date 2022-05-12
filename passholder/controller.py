@@ -96,31 +96,28 @@ def save():
     db.dump(filename, tui.request_password("enter passphrase", repeat=True))
     tui.alert("changes saved")
 
-def main(tui):
-    running = True
+def main():
+    pass
+
+running = True
+tui = Terminal()
+try:
+    db, filename = init_db()
     while running:
-        select = tui.select(["add new", "delete", "search", "save", "exit"])
-        if select == 1:
-            add()
-        elif select == 2:
-            delete()
-        elif select == 3:
-            search()
-        elif select == 4:
-            save()
-        elif select == 5:
-            running = False
-            tui.alert("closing")
-
-
-
-if __name__ == "__main__":
-    tui = Terminal()
-    try:
-        db, filename = init_db()
-        main(tui)
-    except KeyboardInterrupt:
-        tui.alert("\n<C-c>: abort")
-    except EOFError:
-        tui.alert("\n<C-d>: abort")
+       select = tui.select(["add new", "delete", "search", "save", "exit"])
+       if select == 1:
+           add()
+       elif select == 2:
+           delete()
+       elif select == 3:
+           search()
+       elif select == 4:
+           save()
+       elif select == 5:
+           running = False
+           tui.alert("closing")
+except KeyboardInterrupt:
+    tui.alert("\n<C-c>: abort")
+except EOFError:
+    tui.alert("\n<C-d>: abort")
    
