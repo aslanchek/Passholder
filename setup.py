@@ -7,11 +7,11 @@ reqs = [
 
 setup(
     name='passholder',
-    version='0.1.1',
+    version='0.1.4',
     license='GPL-3.0',
     description = 'Password manager',
     url = 'https://github.com/aslanchek/Passholder',
-    download_url = 'https://github.com/aslanchek/Passholder/archive/refs/tags/v0.1.1-alpha.tar.gz',
+    download_url = 'https://github.com/aslanchek/Passholder/archive/refs/tags/v0.1.4-alpha.tar.gz',
     packages=find_packages(),
     long_description='See github for long description.',
     install_requires=reqs,
