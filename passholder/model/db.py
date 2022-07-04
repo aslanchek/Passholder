@@ -53,6 +53,12 @@ class DB:
     def __delitem__(self, site): # Usage: del __db['vk.com']
         self.delete(site)
 
+    def not_empty(self):
+        return True if self.__db else False
+
+    def __contains__(self, site):
+        return self.__db[site]
+
             
     @classmethod
     def create(cls):

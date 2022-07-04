@@ -34,7 +34,7 @@ class Terminal:
             print("C: " + issue)
 
         for i in range(0, len(options)):
-            print("{number}: {option}".format(number=i + 1, option = options[i]))
+            print("{number}) {option}".format(number=i + 1, option = options[i]))
 
         while True:
             try:

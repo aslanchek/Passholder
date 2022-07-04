@@ -82,6 +82,11 @@ def search():
     except errors.AccountDoesNotExist:
         tui.error(f"account for {site} not found")
 
+def list_all():
+    if db.not_empty():
+        for site in db:
+            print(db[site])
+
 def delete():
     try:
         db.delete(tui.request("site"))
@@ -94,7 +99,6 @@ def save():
     tui.alert("changes saved")
 
 try:
-
     tui = Terminal()
     db, filename = init_db()
     
@@ -103,7 +107,7 @@ try:
     
     
     while running:
-        select = tui.select(["add new", "delete", "search", "save", "exit"])
+        select = tui.select(["add new", "delete", "search", "list all", "save", "exit"])
         if select == 1:
             add()
         elif select == 2:
@@ -111,8 +115,10 @@ try:
         elif select == 3:
             search()
         elif select == 4:
-            save()
+            list_all()
         elif select == 5:
+            save()
+        elif select == 6:
             running = False
             tui.alert("closing")
 except KeyboardInterrupt:
